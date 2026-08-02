@@ -1,0 +1,22 @@
+[3.337s] Invoking command in '/home/narayana/swarm_ws/build/dashboard': PYTHONPATH=/home/narayana/swarm_ws/build/dashboard/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/narayana/swarm_ws/install/dashboard/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/narayana/swarm_ws/build/dashboard/build --no-deps symlink_data
+[3.739s] running develop
+[3.930s] running egg_info
+[3.931s] creating dashboard.egg-info
+[3.946s] writing dashboard.egg-info/PKG-INFO
+[3.947s] writing dependency_links to dashboard.egg-info/dependency_links.txt
+[3.947s] writing requirements to dashboard.egg-info/requires.txt
+[3.947s] writing top-level names to dashboard.egg-info/top_level.txt
+[3.948s] writing manifest file 'dashboard.egg-info/SOURCES.txt'
+[3.994s] reading manifest file 'dashboard.egg-info/SOURCES.txt'
+[3.994s] writing manifest file 'dashboard.egg-info/SOURCES.txt'
+[4.018s] running build_ext
+[4.018s] Creating /home/narayana/swarm_ws/install/dashboard/lib/python3.12/site-packages/dashboard.egg-link (link to .)
+[4.019s] 
+[4.019s] Installed /home/narayana/swarm_ws/build/dashboard
+[4.019s] running symlink_data
+[4.020s] creating /home/narayana/swarm_ws/install/dashboard/share/ament_index
+[4.020s] creating /home/narayana/swarm_ws/install/dashboard/share/ament_index/resource_index
+[4.021s] creating /home/narayana/swarm_ws/install/dashboard/share/ament_index/resource_index/packages
+[4.021s] symbolically linking /home/narayana/swarm_ws/build/dashboard/resource/dashboard -> /home/narayana/swarm_ws/install/dashboard/share/ament_index/resource_index/packages
+[4.021s] symbolically linking /home/narayana/swarm_ws/build/dashboard/package.xml -> /home/narayana/swarm_ws/install/dashboard/share/dashboard
+[4.106s] Invoked command in '/home/narayana/swarm_ws/build/dashboard' returned '0': PYTHONPATH=/home/narayana/swarm_ws/build/dashboard/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/narayana/swarm_ws/install/dashboard/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/narayana/swarm_ws/build/dashboard/build --no-deps symlink_data

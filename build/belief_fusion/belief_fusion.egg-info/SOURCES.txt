@@ -1,0 +1,11 @@
+package.xml
+setup.cfg
+setup.py
+belief_fusion/__init__.py
+belief_fusion.egg-info/PKG-INFO
+belief_fusion.egg-info/SOURCES.txt
+belief_fusion.egg-info/dependency_links.txt
+belief_fusion.egg-info/requires.txt
+belief_fusion.egg-info/top_level.txt
+belief_fusion.egg-info/zip-safe
+resource/belief_fusion

@@ -1,0 +1,22 @@
+[3.305s] Invoking command in '/home/narayana/swarm_ws/build/occupancy_mapping': PYTHONPATH=/home/narayana/swarm_ws/build/occupancy_mapping/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/narayana/swarm_ws/install/occupancy_mapping/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/narayana/swarm_ws/build/occupancy_mapping/build --no-deps symlink_data
+[3.728s] running develop
+[3.957s] running egg_info
+[3.957s] creating occupancy_mapping.egg-info
+[3.984s] writing occupancy_mapping.egg-info/PKG-INFO
+[3.984s] writing dependency_links to occupancy_mapping.egg-info/dependency_links.txt
+[3.984s] writing requirements to occupancy_mapping.egg-info/requires.txt
+[3.985s] writing top-level names to occupancy_mapping.egg-info/top_level.txt
+[3.985s] writing manifest file 'occupancy_mapping.egg-info/SOURCES.txt'
+[4.027s] reading manifest file 'occupancy_mapping.egg-info/SOURCES.txt'
+[4.028s] writing manifest file 'occupancy_mapping.egg-info/SOURCES.txt'
+[4.051s] running build_ext
+[4.051s] Creating /home/narayana/swarm_ws/install/occupancy_mapping/lib/python3.12/site-packages/occupancy-mapping.egg-link (link to .)
+[4.051s] 
+[4.052s] Installed /home/narayana/swarm_ws/build/occupancy_mapping
+[4.052s] running symlink_data
+[4.052s] creating /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index
+[4.052s] creating /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index/resource_index
+[4.052s] creating /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index/resource_index/packages
+[4.053s] symbolically linking /home/narayana/swarm_ws/build/occupancy_mapping/resource/occupancy_mapping -> /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index/resource_index/packages
+[4.053s] symbolically linking /home/narayana/swarm_ws/build/occupancy_mapping/package.xml -> /home/narayana/swarm_ws/install/occupancy_mapping/share/occupancy_mapping
+[4.166s] Invoked command in '/home/narayana/swarm_ws/build/occupancy_mapping' returned '0': PYTHONPATH=/home/narayana/swarm_ws/build/occupancy_mapping/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/narayana/swarm_ws/install/occupancy_mapping/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/narayana/swarm_ws/build/occupancy_mapping/build --no-deps symlink_data

@@ -1,0 +1,20 @@
+running develop
+running egg_info
+creating occupancy_mapping.egg-info
+writing occupancy_mapping.egg-info/PKG-INFO
+writing dependency_links to occupancy_mapping.egg-info/dependency_links.txt
+writing requirements to occupancy_mapping.egg-info/requires.txt
+writing top-level names to occupancy_mapping.egg-info/top_level.txt
+writing manifest file 'occupancy_mapping.egg-info/SOURCES.txt'
+reading manifest file 'occupancy_mapping.egg-info/SOURCES.txt'
+writing manifest file 'occupancy_mapping.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/narayana/swarm_ws/install/occupancy_mapping/lib/python3.12/site-packages/occupancy-mapping.egg-link (link to .)
+
+Installed /home/narayana/swarm_ws/build/occupancy_mapping
+running symlink_data
+creating /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index
+creating /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index/resource_index
+creating /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index/resource_index/packages
+symbolically linking /home/narayana/swarm_ws/build/occupancy_mapping/resource/occupancy_mapping -> /home/narayana/swarm_ws/install/occupancy_mapping/share/ament_index/resource_index/packages
+symbolically linking /home/narayana/swarm_ws/build/occupancy_mapping/package.xml -> /home/narayana/swarm_ws/install/occupancy_mapping/share/occupancy_mapping

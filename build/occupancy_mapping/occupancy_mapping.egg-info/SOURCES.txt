@@ -1,0 +1,11 @@
+package.xml
+setup.cfg
+setup.py
+occupancy_mapping/__init__.py
+occupancy_mapping.egg-info/PKG-INFO
+occupancy_mapping.egg-info/SOURCES.txt
+occupancy_mapping.egg-info/dependency_links.txt
+occupancy_mapping.egg-info/requires.txt
+occupancy_mapping.egg-info/top_level.txt
+occupancy_mapping.egg-info/zip-safe
+resource/occupancy_mapping

@@ -1,0 +1,9 @@
+source;share/cbba_allocator/hook/pythonpath.ps1
+source;share/cbba_allocator/hook/pythonpath.dsv
+source;share/cbba_allocator/hook/pythonpath.sh
+source;share/cbba_allocator/hook/ament_prefix_path.ps1
+source;share/cbba_allocator/hook/ament_prefix_path.dsv
+source;share/cbba_allocator/hook/ament_prefix_path.sh
+source;../../build/cbba_allocator/share/cbba_allocator/hook/pythonpath_develop.ps1
+source;../../build/cbba_allocator/share/cbba_allocator/hook/pythonpath_develop.dsv
+source;../../build/cbba_allocator/share/cbba_allocator/hook/pythonpath_develop.sh

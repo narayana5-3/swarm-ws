@@ -1,0 +1,20 @@
+running develop
+running egg_info
+creating dashboard.egg-info
+writing dashboard.egg-info/PKG-INFO
+writing dependency_links to dashboard.egg-info/dependency_links.txt
+writing requirements to dashboard.egg-info/requires.txt
+writing top-level names to dashboard.egg-info/top_level.txt
+writing manifest file 'dashboard.egg-info/SOURCES.txt'
+reading manifest file 'dashboard.egg-info/SOURCES.txt'
+writing manifest file 'dashboard.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/narayana/swarm_ws/install/dashboard/lib/python3.12/site-packages/dashboard.egg-link (link to .)
+
+Installed /home/narayana/swarm_ws/build/dashboard
+running symlink_data
+creating /home/narayana/swarm_ws/install/dashboard/share/ament_index
+creating /home/narayana/swarm_ws/install/dashboard/share/ament_index/resource_index
+creating /home/narayana/swarm_ws/install/dashboard/share/ament_index/resource_index/packages
+symbolically linking /home/narayana/swarm_ws/build/dashboard/resource/dashboard -> /home/narayana/swarm_ws/install/dashboard/share/ament_index/resource_index/packages
+symbolically linking /home/narayana/swarm_ws/build/dashboard/package.xml -> /home/narayana/swarm_ws/install/dashboard/share/dashboard

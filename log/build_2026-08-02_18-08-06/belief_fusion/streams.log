@@ -1,0 +1,22 @@
+[3.323s] Invoking command in '/home/narayana/swarm_ws/build/belief_fusion': PYTHONPATH=/home/narayana/swarm_ws/build/belief_fusion/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/narayana/swarm_ws/install/belief_fusion/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/narayana/swarm_ws/build/belief_fusion/build --no-deps symlink_data
+[3.728s] running develop
+[3.972s] running egg_info
+[3.972s] creating belief_fusion.egg-info
+[3.996s] writing belief_fusion.egg-info/PKG-INFO
+[3.996s] writing dependency_links to belief_fusion.egg-info/dependency_links.txt
+[3.996s] writing requirements to belief_fusion.egg-info/requires.txt
+[3.997s] writing top-level names to belief_fusion.egg-info/top_level.txt
+[3.997s] writing manifest file 'belief_fusion.egg-info/SOURCES.txt'
+[4.037s] reading manifest file 'belief_fusion.egg-info/SOURCES.txt'
+[4.038s] writing manifest file 'belief_fusion.egg-info/SOURCES.txt'
+[4.064s] running build_ext
+[4.065s] Creating /home/narayana/swarm_ws/install/belief_fusion/lib/python3.12/site-packages/belief-fusion.egg-link (link to .)
+[4.065s] 
+[4.066s] Installed /home/narayana/swarm_ws/build/belief_fusion
+[4.066s] running symlink_data
+[4.067s] creating /home/narayana/swarm_ws/install/belief_fusion/share/ament_index
+[4.067s] creating /home/narayana/swarm_ws/install/belief_fusion/share/ament_index/resource_index
+[4.067s] creating /home/narayana/swarm_ws/install/belief_fusion/share/ament_index/resource_index/packages
+[4.068s] symbolically linking /home/narayana/swarm_ws/build/belief_fusion/resource/belief_fusion -> /home/narayana/swarm_ws/install/belief_fusion/share/ament_index/resource_index/packages
+[4.068s] symbolically linking /home/narayana/swarm_ws/build/belief_fusion/package.xml -> /home/narayana/swarm_ws/install/belief_fusion/share/belief_fusion
+[4.188s] Invoked command in '/home/narayana/swarm_ws/build/belief_fusion' returned '0': PYTHONPATH=/home/narayana/swarm_ws/build/belief_fusion/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/narayana/swarm_ws/install/belief_fusion/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/narayana/swarm_ws/build/belief_fusion/build --no-deps symlink_data
