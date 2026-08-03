@@ -1,9 +1,0 @@
-source;share/belief_fusion/hook/pythonpath.ps1
-source;share/belief_fusion/hook/pythonpath.dsv
-source;share/belief_fusion/hook/pythonpath.sh
-source;share/belief_fusion/hook/ament_prefix_path.ps1
-source;share/belief_fusion/hook/ament_prefix_path.dsv
-source;share/belief_fusion/hook/ament_prefix_path.sh
-source;../../build/belief_fusion/share/belief_fusion/hook/pythonpath_develop.ps1
-source;../../build/belief_fusion/share/belief_fusion/hook/pythonpath_develop.dsv
-source;../../build/belief_fusion/share/belief_fusion/hook/pythonpath_develop.sh

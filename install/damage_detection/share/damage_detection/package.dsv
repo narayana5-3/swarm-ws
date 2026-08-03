@@ -1,9 +1,0 @@
-source;share/damage_detection/hook/pythonpath.ps1
-source;share/damage_detection/hook/pythonpath.dsv
-source;share/damage_detection/hook/pythonpath.sh
-source;share/damage_detection/hook/ament_prefix_path.ps1
-source;share/damage_detection/hook/ament_prefix_path.dsv
-source;share/damage_detection/hook/ament_prefix_path.sh
-source;../../build/damage_detection/share/damage_detection/hook/pythonpath_develop.ps1
-source;../../build/damage_detection/share/damage_detection/hook/pythonpath_develop.dsv
-source;../../build/damage_detection/share/damage_detection/hook/pythonpath_develop.sh

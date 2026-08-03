@@ -1,1 +1,0 @@
-/home/narayana/swarm_ws/src/simulation/setup.py
