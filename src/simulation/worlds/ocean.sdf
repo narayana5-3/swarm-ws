@@ -1,0 +1,100 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+
+<world name="ocean">
+
+    <physics name="physics" type="ode">
+        <max_step_size>0.004</max_step_size>
+        <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin
+        filename="gz-sim-physics-system"
+        name="gz::sim::systems::Physics"/>
+
+    <plugin
+        filename="gz-sim-scene-broadcaster-system"
+        name="gz::sim::systems::SceneBroadcaster"/>
+
+    <plugin
+        filename="gz-sim-user-commands-system"
+        name="gz::sim::systems::UserCommands"/>
+
+    <plugin
+        filename="gz-sim-sensors-system"
+        name="gz::sim::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- Applies to every included model with a <buoyancy> tag or collision
+         volume -- AUVs spawned into this world (see models/auv/) get their
+         buoyancy from this single world-level plugin, not per-model. -->
+    <plugin
+        filename="gz-sim-buoyancy-system"
+        name="gz::sim::systems::Buoyancy">
+        <uniform_fluid_density>1000</uniform_fluid_density>
+    </plugin>
+
+    <light name="sun" type="directional">
+        <cast_shadows>true</cast_shadows>
+        <pose>0 0 100 0 0 0</pose>
+
+        <diffuse>1 1 1 1</diffuse>
+        <specular>0.2 0.2 0.2 1</specular>
+
+        <direction>-0.5 0.1 -1</direction>
+    </light>
+
+    <scene>
+        <ambient>0.2 0.3 0.5 1</ambient>
+        <background>0.0 0.2 0.4 1</background>
+    </scene>
+
+    <!-- Seafloor: a large flat BOX, not an SDF <plane> -- a mathematically
+         infinite plane geometry crashed the dartsim/ODE collision detector
+         here with "ODE INTERNAL ERROR 1: assertion aabbBound >= dMinIntExact"
+         (confirmed by isolating: removed everything else down to a single
+         AUV and it still aborted within the first physics step; switching
+         this to a finite box fixed it). Top face sits at z=-50 to match
+         ENV_MIN in occupancy_mapping.py / damage_probability_mapping.py, so
+         the risk grid's covered volume matches where the swarm actually
+         operates (water surface near z=0 down to the seafloor at z=-50).
+         Local (not Fuel-downloaded) so the live demo doesn't depend on
+         network access. -->
+    <model name="seafloor">
+        <static>true</static>
+        <pose>0 0 -50 0 0 0</pose>
+        <link name="seafloor_link">
+            <pose>0 0 -1 0 0 0</pose>
+            <collision name="seafloor_collision">
+                <geometry>
+                    <box>
+                        <size>200 200 2</size>
+                    </box>
+                </geometry>
+            </collision>
+            <visual name="seafloor_visual">
+                <geometry>
+                    <box>
+                        <size>200 200 2</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.5 0.45 0.35 1</ambient>
+                    <diffuse>0.55 0.5 0.4 1</diffuse>
+                </material>
+            </visual>
+        </link>
+    </model>
+
+    <!-- Dam wall + pipeline section the swarm inspects (see
+         models/dam_structure/). Resolved via GZ_SIM_RESOURCE_PATH, which the
+         launch file points at this package's models/ directory. -->
+    <include>
+        <uri>model://dam_structure</uri>
+        <pose>0 0 0 0 0 0</pose>
+    </include>
+
+</world>
+
+</sdf>

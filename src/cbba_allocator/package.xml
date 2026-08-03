@@ -3,9 +3,18 @@
 <package format="3">
   <name>cbba_allocator</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="narayana@todo.todo">narayana</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Risk-prioritized, acoustic-range-limited consensus-based task allocation for the AUV swarm</description>
+  <maintainer email="narayanapanda10@gmail.com">narayana</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>occupancy_mapping</depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

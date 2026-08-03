@@ -3,9 +3,20 @@
 <package format="3">
   <name>simulation</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="narayana@todo.todo">narayana</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Gazebo/ROS2 world, AUV model, and spawn/bridge launch for the multi-AUV swarm demo</description>
+  <maintainer email="narayanapanda10@gmail.com">narayana</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>ros_gz_image</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

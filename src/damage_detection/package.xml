@@ -3,9 +3,16 @@
 <package format="3">
   <name>damage_detection</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="narayana@todo.todo">narayana</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Live per-agent AI crack detection (offline training tools + ROS2 inference node)</description>
+  <maintainer email="narayanapanda10@gmail.com">narayana</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>sensor_msgs</depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

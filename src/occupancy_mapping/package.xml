@@ -3,9 +3,17 @@
 <package format="3">
   <name>occupancy_mapping</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="narayana@todo.todo">narayana</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Per-agent log-odds occupancy grid + acoustic-range-gated distributed belief fusion for the AUV swarm</description>
+  <maintainer email="narayanapanda10@gmail.com">narayana</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <exec_depend>python3-numpy</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
