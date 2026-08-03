@@ -8,12 +8,20 @@ write -- PlanningEnvironment already expects exactly this file layout, so
 zero new environment-loading code was needed.
 
 Live-tuning note: the paper-scale defaults (POP_SIZE=40, MAX_ITERS=150)
-took 73s for a SINGLE waypoint leg on this machine -- unusable for a judge
-watching a live demo. Measured on this exact grid: pop_size=15/max_iters=30
-plans the same leg collision-free in ~6s. Live defaults below reflect that
-real measurement, not a guess; offline/paper-quality planning still uses
-this file's own POP_SIZE/MAX_ITERS constants directly if called without
-overrides.
+took 73s for a SINGLE waypoint leg on this machine in isolation --
+unusable for a judge watching a live demo. pop_size=15/max_iters=30 (the
+first live tuning pass) looked fine in isolation (~6s/leg) but measured
+50s/leg on the user's actual machine running the full stack (Gazebo GUI +
+dashboard + everything else) -- a 4-leg route taking 3+ minutes per agent,
+which read as "the demo is stuck" even though it was genuinely still
+working (confirmed live: all 3 AUVs had actually navigated to the dam wall
+after ~10 minutes). Re-measured directly on that real combined load:
+pop_size=8/max_iters=15 plans the same leg collision-free in ~14s (vs.
+50s), a real ~3.5x speedup, at the cost of a less-optimal (but still
+collision-free) path -- worth it for a live demo where "the swarm visibly
+moves soon" matters more than shortest-path optimality. Offline/paper-
+quality planning still uses this file's own POP_SIZE/MAX_ITERS constants
+directly if called without overrides.
 
 Planning runs in a background thread per replan trigger (not the executor
 callback itself) since even ~6s/leg x several waypoints would otherwise
@@ -50,8 +58,8 @@ from std_msgs.msg import Float64
 from occupancy_mapping.sensor_adapter import quaternion_to_rpy_deg
 from swarm_control.path_planning import PlanningEnvironment, plan_path
 
-LIVE_POP_SIZE = 15
-LIVE_MAX_ITERS = 30
+LIVE_POP_SIZE = 8
+LIVE_MAX_ITERS = 15
 
 # Net downward force at rest: (44.6 - 43.75) kg * 9.81 m/s^2 -- see model.sdf.
 # The exact feedforward left the vehicle slowly sinking in practice (confirmed
