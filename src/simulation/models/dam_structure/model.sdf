@@ -27,8 +27,15 @@
         </geometry>
         <material>
           <ambient>0.55 0.55 0.5 1</ambient>
-          <diffuse>0.6 0.6 0.55 1</diffuse>
-          <specular>0.2 0.2 0.2 1</specular>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>0.15 0.15 0.15 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/concrete_albedo.png</albedo_map>
+              <normal_map>materials/textures/concrete_normal.png</normal_map>
+              <roughness_map>materials/textures/concrete_roughness.png</roughness_map>
+            </metal>
+          </pbr>
         </material>
       </visual>
     </link>
@@ -61,8 +68,16 @@
         </geometry>
         <material>
           <ambient>0.35 0.35 0.4 1</ambient>
-          <diffuse>0.4 0.4 0.45 1</diffuse>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
           <specular>0.3 0.3 0.3 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/rusty_metal_albedo.png</albedo_map>
+              <normal_map>materials/textures/rusty_metal_normal.png</normal_map>
+              <roughness_map>materials/textures/rusty_metal_roughness.png</roughness_map>
+              <metalness_map>materials/textures/rusty_metal_metalness.png</metalness_map>
+            </metal>
+          </pbr>
         </material>
       </visual>
     </link>

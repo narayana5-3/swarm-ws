@@ -43,8 +43,8 @@ import json
 import argparse
 import numpy as np
 
-from train import train
-from eval_visualize import evaluate
+from .train import train
+from .eval_visualize import evaluate
 
 
 def build_configs(deepcrack_checkpoint=None):

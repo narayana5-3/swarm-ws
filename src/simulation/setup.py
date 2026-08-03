@@ -4,6 +4,24 @@ import os
 
 package_name = 'simulation'
 
+
+def model_data_files(model_dir):
+    """Recursively collects every file under models/<model_dir>/ (including
+    the materials/textures/ subdirectory PBR maps live in) and maps each one
+    to its matching destination path under share/simulation/models/<model_dir>/
+    -- a plain glob('models/<model_dir>/*') only grabs the top-level model.sdf/
+    model.config and silently drops texture files in subdirectories."""
+    entries = []
+    base = os.path.join('models', model_dir)
+    for root, _dirs, files in os.walk(base):
+        if not files:
+            continue
+        dest = os.path.join('share', package_name, root)
+        srcs = [os.path.join(root, f) for f in files]
+        entries.append((dest, srcs))
+    return entries
+
+
 setup(
     name=package_name,
     version='0.0.0',
@@ -26,17 +44,12 @@ setup(
             glob('worlds/*')
         ),
         (
-            os.path.join('share', package_name, 'models', 'auv'),
-            glob('models/auv/*')
-        ),
-        (
-            os.path.join('share', package_name, 'models', 'dam_structure'),
-            glob('models/dam_structure/*')
-        ),
-        (
             os.path.join('share', package_name, 'config'),
             glob('config/*')
         ),
+        *model_data_files('auv'),
+        *model_data_files('dam_structure'),
+        *model_data_files('seafloor'),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -49,4 +62,3 @@ setup(
         'console_scripts': [],
     },
 )
-

@@ -9,9 +9,11 @@ Usage:
     ros2 launch simulation full_demo.launch.py num_auvs:=3
     ros2 launch simulation full_demo.launch.py num_auvs:=3 headless:=true  # CI/verification, no GUI
 
-checkpoint_path (damage_detection) defaults to empty -- an untrained model
-runs by default (see damage_detection/infer_node.py's own warning); pass a
-real train.py checkpoint before the actual judged demo.
+checkpoint_path (damage_detection) defaults to the trained checkpoint
+shipped in damage_detection/checkpoints/sim_finetuned.pt (DeepCrack-
+pretrained, fine-tuned on real captured Gazebo frames -- see that
+package's launch file for the real held-out Dice/IoU numbers). Pass a
+different path to use a newer checkpoint instead.
 """
 
 from launch import LaunchDescription
@@ -29,6 +31,10 @@ def _include(package, launch_file, launch_arguments, delay_sec):
     return TimerAction(period=delay_sec, actions=[action])
 
 
+_DEFAULT_CHECKPOINT = os.path.join(
+    get_package_share_directory("damage_detection"), "checkpoints", "sim_finetuned.pt")
+
+
 def generate_launch_description():
     num_auvs = LaunchConfiguration("num_auvs")
     run_dir = LaunchConfiguration("run_dir")
@@ -40,7 +46,7 @@ def generate_launch_description():
         DeclareLaunchArgument("num_auvs", default_value="3"),
         DeclareLaunchArgument("run_dir", default_value="~/swarm_ws/live_run"),
         DeclareLaunchArgument("headless", default_value="false"),
-        DeclareLaunchArgument("checkpoint_path", default_value=""),
+        DeclareLaunchArgument("checkpoint_path", default_value=_DEFAULT_CHECKPOINT),
         DeclareLaunchArgument("port", default_value="8080"),
 
         # Sim needs to be up and spawning before anything else has topics to

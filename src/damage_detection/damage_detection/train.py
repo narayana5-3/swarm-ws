@@ -18,7 +18,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-from model_factory import build_model
+from .model_factory import build_model
 
 
 def augment_pair(img, mask, rng):

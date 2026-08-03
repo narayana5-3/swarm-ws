@@ -25,7 +25,7 @@ import numpy as np
 import cv2
 import torch
 
-from model_factory import build_model
+from .model_factory import build_model
 
 
 def load_model(model_path, device):

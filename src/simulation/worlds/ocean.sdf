@@ -46,8 +46,21 @@
     </light>
 
     <scene>
-        <ambient>0.2 0.3 0.5 1</ambient>
-        <background>0.0 0.2 0.4 1</background>
+        <ambient>0.15 0.28 0.35 1</ambient>
+        <background>0.02 0.18 0.28 1</background>
+        <!-- Underwater murk: real oceans/reservoirs attenuate visibility to
+             a few tens of meters, not the crisp infinite-visibility default
+             -- fog fades distant geometry into the background color instead
+             of everything looking equally sharp regardless of range, which
+             otherwise reads as "a dry-land scene with blue paint," not water. -->
+        <fog>
+            <color>0.05 0.22 0.3 1</color>
+            <type>exp2</type>
+            <density>0.018</density>
+            <start>2</start>
+            <end>45</end>
+        </fog>
+        <grid>false</grid>
     </scene>
 
     <!-- Seafloor: a large flat BOX, not an SDF <plane> -- a mathematically
@@ -59,33 +72,15 @@
          ENV_MIN in occupancy_mapping.py / damage_probability_mapping.py, so
          the risk grid's covered volume matches where the swarm actually
          operates (water surface near z=0 down to the seafloor at z=-50).
-         Local (not Fuel-downloaded) so the live demo doesn't depend on
-         network access. -->
-    <model name="seafloor">
-        <static>true</static>
-        <pose>0 0 -50 0 0 0</pose>
-        <link name="seafloor_link">
-            <pose>0 0 -1 0 0 0</pose>
-            <collision name="seafloor_collision">
-                <geometry>
-                    <box>
-                        <size>200 200 2</size>
-                    </box>
-                </geometry>
-            </collision>
-            <visual name="seafloor_visual">
-                <geometry>
-                    <box>
-                        <size>200 200 2</size>
-                    </box>
-                </geometry>
-                <material>
-                    <ambient>0.5 0.45 0.35 1</ambient>
-                    <diffuse>0.55 0.5 0.4 1</diffuse>
-                </material>
-            </visual>
-        </link>
-    </model>
+         Moved into its own models/seafloor/ package (see that model's own
+         model.config) so it can carry a real PBR sandy-seabed texture
+         instead of a flat material color -- resolved the same way as
+         dam_structure, via GZ_SIM_RESOURCE_PATH, so it stays fully local
+         (no network access needed at demo time). -->
+    <include>
+        <uri>model://seafloor</uri>
+        <pose>0 0 -51 0 0 0</pose>
+    </include>
 
     <!-- Dam wall + pipeline section the swarm inspects (see
          models/dam_structure/). Resolved via GZ_SIM_RESOURCE_PATH, which the
