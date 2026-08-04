@@ -22,6 +22,7 @@ the route to plan through.
 
 import os
 import glob
+import json
 import threading
 
 import numpy as np
@@ -132,6 +133,7 @@ class CBBAAllocatorNode(Node):
         run_sequential_auction(agents, tasks, acoustic_range=ACOUSTIC_MAX_RANGE)
 
         tasks_by_id = {t["task_id"]: t for t in tasks}
+        assigned_tasks = []
         for name in self.agent_names:
             msg = PoseArray()
             msg.header.stamp = self.get_clock().now().to_msg()
@@ -142,10 +144,30 @@ class CBBAAllocatorNode(Node):
                 pose.position.x, pose.position.y, pose.position.z = (float(v) for v in pos)
                 pose.orientation.w = 1.0
                 msg.poses.append(pose)
+                assigned_tasks.append({
+                    "task_id": task_id,
+                    "position": [float(v) for v in pos],
+                    "value": float(tasks_by_id[task_id]["value"]),
+                })
             self.waypoint_pubs[name].publish(msg)
+
+        self._save_current_tasks(assigned_tasks)
 
         assignment_summary = {name: len(agents[name].path) for name in self.agent_names}
         self.get_logger().info(f"Auctioned {len(tasks)} tasks -> {assignment_summary}")
+
+    def _save_current_tasks(self, assigned_tasks):
+        """Snapshot of exactly the tasks assigned THIS cycle (id/position/value)
+        for dashboard_node's coverage panel. Deliberately scoped to "this
+        cycle's assignment," not a lifetime total: nothing in this pipeline
+        marks a risk-grid location as "done" once inspected (no decay on
+        visit), so the same high-risk spots keep re-winning every auction --
+        a lifetime running total would never converge toward 100%. Progress
+        against what the swarm is actually attempting right now does."""
+        out_dir = os.path.join(self.run_dir, "tasks")
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(out_dir, "current_tasks.json"), "w") as f:
+            json.dump(assigned_tasks, f)
 
 
 def main(args=None):

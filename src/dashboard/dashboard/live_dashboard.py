@@ -128,8 +128,8 @@ def _render_status_panel(state, w, h):
                 (30, 30, 30), 1, cv2.LINE_AA)
     y += 20
     frac = state.cumulative_value / max(state.total_value, 1e-6) if state.total_value else 0
-    cv2.putText(img, f"Coverage: {state.tasks_captured}/{state.total_tasks_estimate} tasks "
-                       f"({frac*100:.0f}% risk value)", (10, y),
+    cv2.putText(img, f"Coverage (this cycle): {state.tasks_captured}/{state.total_tasks_estimate} "
+                       f"tasks ({frac*100:.0f}% risk value)", (10, y),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.42, (30, 30, 30), 1, cv2.LINE_AA)
     y += 25
 

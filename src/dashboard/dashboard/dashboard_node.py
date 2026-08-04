@@ -27,7 +27,7 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import Image
-from geometry_msgs.msg import PoseArray
+from geometry_msgs.msg import PoseArray, PointStamped
 from flask import Flask, Response, jsonify, render_template_string
 
 from occupancy_mapping.occupancy_mapping import ENV_MIN, ENV_MAX
@@ -67,6 +67,11 @@ class DashboardNode(Node):
         self.state.status_message = "Waiting for swarm..."
         self.state_lock = threading.Lock()
         self.latest_damage_prob = {name: None for name in agent_names}
+        # Current auction cycle's assigned tasks (id/position/value), refreshed
+        # from disk -- see _refresh_from_disk for why coverage is scoped to
+        # "this cycle" rather than a lifetime total.
+        self.current_tasks_by_id = {}
+        self.captured_task_ids_this_cycle = set()
 
         for name in agent_names:
             self.create_subscription(
@@ -79,6 +84,8 @@ class DashboardNode(Node):
                 qos_profile_sensor_data)
             self.create_subscription(
                 PoseArray, f"/{name}/assigned_waypoints", self._make_waypoints_cb(name), 10)
+            self.create_subscription(
+                PointStamped, f"/{name}/task_reached", self._make_task_reached_cb(name), 10)
 
         self.create_timer(refresh_period, self._refresh_from_disk)
         self._start_flask(port)
@@ -118,7 +125,41 @@ class DashboardNode(Node):
             with self.state_lock:
                 self.state.agent_current_task[name] = (
                     f"{len(msg.poses)} waypoint(s) assigned" if msg.poses else None)
+                if msg.poses:
+                    self.state.recent_detections_log.insert(
+                        0, f"tick {self.state.tick}: {name} assigned "
+                           f"{len(msg.poses)} task waypoint(s)")
+                    del self.state.recent_detections_log[20:]
         return cb
+
+    def _make_task_reached_cb(self, name):
+        def cb(msg):
+            pos = np.array([msg.point.x, msg.point.y, msg.point.z])
+            with self.state_lock:
+                task_id, task = self._nearest_task(pos)
+                if task_id is None or task_id in self.captured_task_ids_this_cycle:
+                    return  # no current-cycle task snapshot yet, or already logged
+                self.captured_task_ids_this_cycle.add(task_id)
+                self.state.tasks_captured += 1
+                self.state.cumulative_value += task["value"]
+                self.state.recent_detections_log.insert(
+                    0, f"tick {self.state.tick}: {name} reached task near "
+                       f"({pos[0]:.1f},{pos[1]:.1f},{pos[2]:.1f}), value={task['value']:.1f}")
+                del self.state.recent_detections_log[20:]
+        return cb
+
+    def _nearest_task(self, pos, tolerance_m=3.0):
+        """Matches a reached position back to a task_id in the current
+        cycle's snapshot. Positions round-trip through PoseArray -> the
+        planner -> here, so an exact task should match well within
+        tolerance; anything farther is stale (task list already rolled to a
+        new cycle) rather than a real match."""
+        best_id, best_task, best_dist = None, None, tolerance_m
+        for task_id, task in self.current_tasks_by_id.items():
+            dist = float(np.linalg.norm(np.array(task["position"]) - pos))
+            if dist < best_dist:
+                best_id, best_task, best_dist = task_id, task, dist
+        return best_id, best_task
 
     # -- Periodic disk refresh: risk map + prognosis -----------------------
 
@@ -145,6 +186,28 @@ class DashboardNode(Node):
                     self.state.status_message = f"{len(records)} detection(s) tracked"
             except (json.JSONDecodeError, OSError) as exc:
                 self.get_logger().warn(f"prognosis refresh skipped this tick: {exc}")
+
+        tasks_path = os.path.join(self.run_dir, "tasks", "current_tasks.json")
+        if os.path.exists(tasks_path):
+            try:
+                with open(tasks_path) as f:
+                    tasks = json.load(f)
+                with self.state_lock:
+                    new_ids = {t["task_id"] for t in tasks}
+                    if new_ids != set(self.current_tasks_by_id.keys()):
+                        # cbba_allocator re-auctioned -- a new cycle's worth of
+                        # tasks means a fresh coverage denominator, not adding
+                        # onto the last cycle's counts (see cbba_node.py's
+                        # _save_current_tasks for why this can't be a lifetime
+                        # running total).
+                        self.current_tasks_by_id = {t["task_id"]: t for t in tasks}
+                        self.captured_task_ids_this_cycle = set()
+                        self.state.tasks_captured = 0
+                        self.state.cumulative_value = 0.0
+                        self.state.total_tasks_estimate = len(tasks)
+                        self.state.total_value = sum(t["value"] for t in tasks)
+            except (json.JSONDecodeError, OSError, KeyError) as exc:
+                self.get_logger().warn(f"task list refresh skipped this tick: {exc}")
 
         with self.state_lock:
             self.state.tick += 1

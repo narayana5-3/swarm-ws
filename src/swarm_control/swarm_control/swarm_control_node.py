@@ -52,7 +52,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import PoseArray
+from geometry_msgs.msg import PoseArray, PointStamped
 from std_msgs.msg import Float64
 
 from occupancy_mapping.sensor_adapter import quaternion_to_rpy_deg
@@ -83,6 +83,7 @@ class AgentControlState:
         self.yaw_deg = None
         self.route = []       # list of np.array([x, y, z]) waypoints
         self.route_index = 0
+        self.task_indices = set()  # route indices that are actual task targets
         self.planning_lock = threading.Lock()
 
 
@@ -115,6 +116,11 @@ class SwarmControlNode(Node):
                 for joint in ("surge_left_joint", "surge_right_joint", "sway_joint",
                               "heave_front_joint", "heave_rear_joint")
             }
+
+        self.task_reached_pubs = {
+            name: self.create_publisher(PointStamped, f"/{name}/task_reached", 10)
+            for name in self.agent_names
+        }
 
         self.create_timer(1.0 / control_rate, self._control_tick)
 
@@ -168,14 +174,17 @@ class SwarmControlNode(Node):
 
             leg_start = st.position
             route = []
+            task_indices = set()
             for goal in targets:
                 result = plan_path(leg_start, goal, env,
                                     pop_size=LIVE_POP_SIZE, max_iters=LIVE_MAX_ITERS)
                 route.extend(result["final_path"][1:])  # skip duplicate leg_start
+                task_indices.add(len(route) - 1)  # this route point IS a task target
                 leg_start = goal
 
             st.route = route
             st.route_index = 0
+            st.task_indices = task_indices
             self.get_logger().info(f"[{name}] replanned route: {len(route)} points, "
                                     f"{len(targets)} task waypoints")
         finally:
@@ -196,6 +205,13 @@ class SwarmControlNode(Node):
                 dist = np.linalg.norm(delta_world)
 
                 if dist <= WAYPOINT_ARRIVAL_THRESHOLD_M:
+                    if st.route_index in st.task_indices:
+                        point_msg = PointStamped()
+                        point_msg.header.stamp = self.get_clock().now().to_msg()
+                        point_msg.header.frame_id = "world"
+                        (point_msg.point.x, point_msg.point.y,
+                         point_msg.point.z) = (float(v) for v in target)
+                        self.task_reached_pubs[name].publish(point_msg)
                     st.route_index += 1
                 else:
                     yaw_rad = np.radians(st.yaw_deg)
