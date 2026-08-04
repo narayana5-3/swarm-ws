@@ -41,6 +41,7 @@ def generate_launch_description():
     headless = LaunchConfiguration("headless")
     checkpoint_path = LaunchConfiguration("checkpoint_path")
     port = LaunchConfiguration("port")
+    allocation_period_sec = LaunchConfiguration("allocation_period_sec")
 
     return LaunchDescription([
         DeclareLaunchArgument("num_auvs", default_value="3"),
@@ -48,6 +49,9 @@ def generate_launch_description():
         DeclareLaunchArgument("headless", default_value="false"),
         DeclareLaunchArgument("checkpoint_path", default_value=_DEFAULT_CHECKPOINT),
         DeclareLaunchArgument("port", default_value="8080"),
+        # See cbba_node.py's own declare_parameter comment for why this
+        # defaults to 300s and not the more "adaptive-looking" 15s.
+        DeclareLaunchArgument("allocation_period_sec", default_value="300.0"),
 
         # Sim needs to be up and spawning before anything else has topics to
         # subscribe to; the other stages stagger in behind it so each one's
@@ -61,7 +65,8 @@ def generate_launch_description():
         _include("belief_fusion", "belief_fusion.launch.py",
                  {"num_auvs": num_auvs, "run_dir": run_dir}, 12.0),
         _include("cbba_allocator", "cbba_allocator.launch.py",
-                 {"num_auvs": num_auvs, "run_dir": run_dir}, 20.0),
+                 {"num_auvs": num_auvs, "run_dir": run_dir,
+                  "allocation_period_sec": allocation_period_sec}, 20.0),
         _include("swarm_control", "swarm_control.launch.py",
                  {"num_auvs": num_auvs, "run_dir": run_dir}, 20.0),
         _include("dashboard", "dashboard.launch.py",

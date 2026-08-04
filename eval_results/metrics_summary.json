@@ -1,0 +1,39 @@
+{
+  "deepcrack_pretrained": {
+    "n_images": 80,
+    "n_with_crack": 80,
+    "all_images": {
+      "dice": 0.8239343197083834,
+      "iou": 0.7177036500647296,
+      "precision": 0.7799365813702033,
+      "recall": 0.9004055470345176
+    },
+    "crack_containing_only": {
+      "dice": 0.8239343197083834,
+      "iou": 0.7177036500647296,
+      "precision": 0.7799365813702033,
+      "recall": 0.9004055470345176
+    }
+  },
+  "sim_finetuned": {
+    "n_images": 33,
+    "n_with_crack": 18,
+    "all_images": {
+      "dice": 0.5856173208005409,
+      "iou": 0.507770697597836,
+      "precision": 0.5103218831880199,
+      "recall": 0.9922463894134943
+    },
+    "crack_containing_only": {
+      "dice": 0.740298234366005,
+      "iou": 0.597579425161046,
+      "precision": 0.6022565987430497,
+      "recall": 0.9857850472580734
+    }
+  },
+  "_provenance": {
+    "deepcrack_pretrained": "checkpoints/deepcrack_pretrained_val_files.txt -- 80 held-out real DeepCrack photographs, never trained on (all contain real cracks).",
+    "sim_finetuned": "checkpoints/sim_finetuned_val_files.txt -- 33 held-out real captured Gazebo frames, never trained on (18 contain an injected crack, 15 do not -- crack_containing_only is the fair localization score; all_images includes the Dice 0/0-on-empty-correct-prediction discontinuity noted in eval_visualize.py).",
+    "note": "sim_finetuned = deepcrack_pretrained warm-started then fine-tuned on real captured Gazebo frames -- this is OUR improvement over training from scratch or from ImageNet-only weights."
+  }
+}

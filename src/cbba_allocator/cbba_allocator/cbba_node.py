@@ -43,7 +43,24 @@ class CBBAAllocatorNode(Node):
 
         self.declare_parameter("num_auvs", 3)
         self.declare_parameter("run_dir", os.path.expanduser("~/swarm_ws/live_run"))
-        self.declare_parameter("allocation_period_sec", 15.0)
+        # Wall-clock timer (use_sim_time is not set for this node), so this
+        # period is real seconds, not sim seconds. At the measured real-time
+        # factor on the demo machine (~0.2-0.26x), the previous 15.0s default
+        # reset dashboard_node's per-cycle coverage counter to 0 before any
+        # agent could physically plan+travel to even one task -- coverage
+        # looked permanently stuck at 0/N regardless of how long the sim had
+        # been running. Live re-testing after raising this to 180.0s showed
+        # captures do happen, but NOA-SQP route length through the dam-wall
+        # obstacle field is highly variable by start position -- 24 to 900+
+        # points measured live for otherwise-identical 4-task assignments --
+        # so a worse-routed cycle could still exceed 180s before completing
+        # even its first leg. Combined with swarm_control_node.py's matching
+        # fix (don't discard an in-progress route when the newly-auctioned
+        # task set is unchanged, which this pipeline's no-decay-on-visit risk
+        # grid makes common), 300.0s gives a bigger safety margin for the
+        # remaining case where the task set genuinely does change cycle to
+        # cycle -- still short enough to re-auction several times in a demo.
+        self.declare_parameter("allocation_period_sec", 300.0)
 
         num_auvs = self.get_parameter("num_auvs").value
         self.run_dir = os.path.expanduser(self.get_parameter("run_dir").value)

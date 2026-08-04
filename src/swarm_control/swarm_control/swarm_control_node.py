@@ -76,6 +76,28 @@ SURGE_GAIN = 4.0
 SWAY_GAIN = 4.0
 HEAVE_GAIN = 6.0
 
+TARGET_MATCH_TOLERANCE_M = 0.5  # smaller than voxel size (0.5m) -- the same
+                                   # task re-winning an auction reproduces
+                                   # bit-identical positions from the same
+                                   # risk grid, this only needs to absorb
+                                   # negligible float round-trip noise.
+
+
+def _same_targets(new_targets, prior_targets):
+    """True if new_targets is the same set of positions as prior_targets
+    (order-independent -- CBBA's visiting order can differ even when the
+    underlying task set is unchanged). None/length mismatch -> not the same."""
+    if prior_targets is None or len(new_targets) != len(prior_targets):
+        return False
+    remaining = list(prior_targets)
+    for t in new_targets:
+        match_idx = next((i for i, p in enumerate(remaining)
+                           if np.linalg.norm(t - p) < TARGET_MATCH_TOLERANCE_M), None)
+        if match_idx is None:
+            return False
+        del remaining[match_idx]
+    return True
+
 
 class AgentControlState:
     def __init__(self):
@@ -85,6 +107,7 @@ class AgentControlState:
         self.route_index = 0
         self.task_indices = set()  # route indices that are actual task targets
         self.planning_lock = threading.Lock()
+        self.current_targets = None  # target positions the active route is for
 
 
 class SwarmControlNode(Node):
@@ -144,6 +167,22 @@ class SwarmControlNode(Node):
             if not targets:
                 return
             st = self.state[name]
+            if _same_targets(targets, st.current_targets):
+                # cbba_allocator re-auctions periodically, but since nothing
+                # in this pipeline marks a risk-grid location as "resolved"
+                # once visited, the same highest-value tasks legitimately
+                # keep re-winning every auction while nothing has been
+                # captured yet. Without this check, _replan below discards
+                # the agent's in-progress route (it always plans fresh from
+                # the agent's CURRENT position) every single cycle -- and
+                # since NOA-SQP route length through the dam-wall obstacle
+                # field varies wildly by start position (24 to 900+ points
+                # measured live for an identical 4-task assignment), an
+                # agent could perpetually get reset before ever completing
+                # even its first leg, no matter how long the auction period
+                # is. If the target set hasn't actually changed, keep
+                # executing the current route instead of restarting it.
+                return
             if not st.planning_lock.acquire(blocking=False):
                 # A replan for this agent is already in flight. cbba_allocator
                 # re-auctions every 15s; NOA-SQP planning legs measured 6-30s
@@ -185,6 +224,7 @@ class SwarmControlNode(Node):
             st.route = route
             st.route_index = 0
             st.task_indices = task_indices
+            st.current_targets = targets
             self.get_logger().info(f"[{name}] replanned route: {len(route)} points, "
                                     f"{len(targets)} task waypoints")
         finally:

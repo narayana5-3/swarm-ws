@@ -144,6 +144,27 @@ def _render_status_panel(state, w, h):
     return img
 
 
+PROGNOSIS_BAND_ORDER = ["CRITICAL", "HIGH", "MODERATE", "LOW", "NONE"]
+
+
+def _select_representative_records(records, max_total=8, max_per_band=2):
+    """Picks up to max_per_band records per urgency band (worst-of-band
+    first -- records are already severity-sorted by degradation_estimator.py
+    before this list is saved, so filtering by band preserves that order)
+    instead of a blind top-N slice. Real prognosis data spans multiple
+    bands (e.g. live_run/prognosis.json: 46 CRITICAL/7 HIGH/1 MODERATE;
+    demo_dryrun/prognosis.json: spans all 4 bands down to LOW) -- a blind
+    [:N] slice on a severity-sorted list only ever shows the single most-
+    severe band, hiding that real variance from the panel entirely."""
+    selected = []
+    for band in PROGNOSIS_BAND_ORDER:
+        band_records = [r for r in records if r.get("urgency_band", "NONE") == band]
+        selected.extend(band_records[:max_per_band])
+        if len(selected) >= max_total:
+            break
+    return selected[:max_total]
+
+
 def _render_prognosis_panel(state, w, h):
     img = np.full((h, w, 3), 255, dtype=np.uint8)
     img = _panel_header(img, "Degradation prognosis", w)
@@ -153,7 +174,7 @@ def _render_prognosis_panel(state, w, h):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.45, (120, 120, 120), 1, cv2.LINE_AA)
         return img
 
-    for r in state.prognosis_records[:8]:
+    for r in _select_representative_records(state.prognosis_records):
         band = r.get("urgency_band", "NONE")
         color = URGENCY_COLORS_BGR.get(band, (150, 150, 150))
         cv2.rectangle(img, (10, y - 12), (26, y + 2), color, -1)
